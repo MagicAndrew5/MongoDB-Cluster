@@ -1,0 +1,380 @@
+version: '3.2'
+services:
+
+## Router
+  router01:
+    image: mongo:latest
+    container_name: router-01
+    command: mongos --port 27017 --configdb rs-config-server/configsvr01:27017 --bind_ip_all
+    ports:
+      - 27117:27017 # sx host, dx container
+    volumes:
+      - ./scripts:/scripts
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == master
+    networks:
+      - net_overlay
+
+## Config Servers
+  configsvr01:
+    image: mongo:latest
+    container_name: mongo-config-01
+    command: mongod --port 27017 --configsvr --replSet rs-config-server
+    volumes:
+      - ./scripts:/scripts
+    ports:
+      - 27118:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == master
+    networks:
+      - net_overlay
+
+  configsvr02:
+    image: mongo:latest
+    container_name: mongo-config-02
+    command: mongod --port 27017 --configsvr --replSet rs-config-server
+    volumes:
+      - ./scripts:/scripts
+    ports:
+      - 27119:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == master
+    networks:
+      - net_overlay
+
+  configsvr03:
+    image: mongo:latest
+    container_name: mongo-config-03
+    command: mongod --port 27017 --configsvr --replSet rs-config-server
+    volumes:
+      - ./scripts:/scripts
+    ports:
+      - 27120:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == master
+    networks:
+      - net_overlay
+    
+
+## Shards
+
+  ## Shards 01
+  shard01-a:
+    image: mongo:latest
+    container_name: shard-01-node-a
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-01
+    volumes:
+      - ./scripts:/scripts
+    ports:
+      - 27122:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == master
+    networks:
+      - net_overlay
+  shard01-b:
+    image: mongo:latest
+    container_name: shard-01-node-b
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-01
+    volumes:
+      - ./scripts:/scripts
+    ports:
+      - 27123:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == master
+    networks:
+      - net_overlay
+  shard01-c:
+    image: mongo:latest
+    container_name: shard-01-node-c
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-01
+    volumes:
+      - ./scripts:/scripts
+    ports:
+      - 27124:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == master
+    networks:
+      - net_overlay
+
+  ## Shards 02
+  shard02-a:
+    image: mongo:latest
+    container_name: shard-02-node-a
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-02
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27125:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerA
+    networks:
+      - net_overlay
+  shard02-b:
+    image: mongo:latest
+    container_name: shard-02-node-b
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-02
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27126:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerA
+    networks:
+      - net_overlay
+  shard02-c:
+    image: mongo:latest
+    container_name: shard-02-node-c
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-02
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27127:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerA
+    networks:
+      - net_overlay
+
+ ## Shards 03
+  shard03-a:
+    image: mongo:latest
+    container_name: shard-03-node-a
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-03
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27128:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerA
+    networks:
+      - net_overlay
+  shard03-b:
+    image: mongo:latest
+    container_name: shard-03-node-b
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-03
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27129:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerA
+    networks:
+      - net_overlay
+  shard03-c:
+    image: mongo:latest
+    container_name: shard-03-node-c
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-03
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27130:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerA
+    networks:
+      - net_overlay
+
+ ## Shards 04
+  shard04-a:
+    image: mongo:latest
+    container_name: shard-04-node-a
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-04
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27131:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerA
+    networks:
+      - net_overlay
+  shard04-b:
+    image: mongo:latest
+    container_name: shard-04-node-4
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-04
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27132:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerA
+    networks:
+      - net_overlay
+  shard04-c:
+    image: mongo:latest
+    container_name: shard-04-node-c
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-04
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27133:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerA
+    networks:
+      - net_overlay
+  
+  ## Shards 05
+  shard05-a:
+    image: mongo:latest
+    container_name: shard-05-node-a
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-05
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27134:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerT
+    networks:
+      - net_overlay
+  shard05-b:
+    image: mongo:latest
+    container_name: shard-05-node-4
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-05
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27135:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerT
+    networks:
+      - net_overlay
+  shard05-c:
+    image: mongo:latest
+    container_name: shard-05-node-c
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-05
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27136:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerT
+    networks:
+      - net_overlay
+
+  ## Shards 06
+  shard06-a:
+    image: mongo:latest
+    container_name: shard-06-node-a
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-06
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27137:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerT
+    networks:
+      - net_overlay
+  shard06-b:
+    image: mongo:latest
+    container_name: shard-06-node-4
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-06
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27138:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerT
+    networks:
+      - net_overlay
+  shard06-c:
+    image: mongo:latest
+    container_name: shard-06-node-c
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-06
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27139:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerT
+    networks:
+      - net_overlay
+
+  ## Shards 07
+  shard07-a:
+    image: mongo:latest
+    container_name: shard-07-node-a
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-07
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27140:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerT
+    networks:
+      - net_overlay
+  shard07-b:
+    image: mongo:latest
+    container_name: shard-07-node-4
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-07
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27141:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerT
+    networks:
+      - net_overlay
+  shard07-c:
+    image: mongo:latest
+    container_name: shard-07-node-c
+    command: mongod --port 27017 --shardsvr --replSet rs-shard-07
+    volumes:
+      - /home/studente/Desktop/ProgettoArch/project_mongoDB/scripts:/scripts
+    ports:
+      - 27142:27017
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == workerT
+    networks:
+      - net_overlay
+      
+networks:
+  net_overlay:
+    external: true
+
